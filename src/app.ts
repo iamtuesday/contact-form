@@ -1,10 +1,21 @@
-import express, { Response, Request } from 'express'
+import express, { Express, Response, Request } from 'express'
 import cors from 'cors'
+const Joi = require('joi')
+const app: Express = express()
 
-const app = express()
+const signupSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(3).max(10).required(),
+})
+
+app.post('/api/signup', (req: Request, res: Response) => {
+  const { error, value } = signupSchema.validate(req.body, {
+    abortEarly: false,
+  })
+})
 
 //Update Routes
-// const userRoutes = require('./routes/userRoutes');
+// const userRoutes = require('./routes/userRoutes')
 
 //Middlewares
 app.use(cors())
